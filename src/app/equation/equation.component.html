@@ -1,1 +1,10 @@
-<p>equation works!</p>
+<form [formGroup]="equathionForm">
+    {{firstValue}} + {{secondValue}} = 
+    <input type="text" formControlName="answer"/>
+</form>
+
+
+<hr/>
+<div>Form is valid:{{equathionForm.valid}}</div>
+<div>Form value:{{equathionForm.value | json}}</div>
+<div>Form errors:{{equathionForm.errors | json}}</div>
