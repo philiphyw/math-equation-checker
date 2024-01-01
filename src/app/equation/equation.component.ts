@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { EquationValidators } from '../equation-validators';
-import { Subscription } from 'rxjs';
+import { Subscription, delay } from 'rxjs';
 
 @Component({
   selector: 'app-equation',
@@ -37,15 +37,13 @@ export class EquationComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subscriptions.add(
-      this.equathionForm.statusChanges.subscribe((value) => {
+      this.equathionForm.statusChanges.pipe(delay(500)).subscribe((value) => {
         if (value.toLocaleLowerCase() === 'valid') {
-          setTimeout(() => {
-            this.equathionForm.patchValue({
-              firstValue:  this.generateRandomNumber(),
-              secondValue:  this.generateRandomNumber(),
-              answer:''
-            })
-          },2000)
+          this.equathionForm.patchValue({
+            firstValue:  this.generateRandomNumber(),
+            secondValue:  this.generateRandomNumber(),
+            answer:''
+          })
         }
       })
     );
