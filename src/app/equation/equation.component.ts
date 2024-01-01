@@ -40,13 +40,11 @@ export class EquationComponent implements OnInit, OnDestroy {
       this.equathionForm.statusChanges.subscribe((value) => {
         if (value.toLocaleLowerCase() === 'valid') {
           setTimeout(() => {
-            this.equathionForm.controls.firstValue.setValue(
-              this.generateRandomNumber()
-            );
-            this.equathionForm.controls.secondValue.setValue(
-              this.generateRandomNumber()
-            );
-            this.equathionForm.controls.answer.setValue('');
+            this.equathionForm.patchValue({
+              firstValue:  this.generateRandomNumber(),
+              secondValue:  this.generateRandomNumber(),
+              answer:''
+            })
           },2000)
         }
       })

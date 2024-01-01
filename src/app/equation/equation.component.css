@@ -4,6 +4,7 @@ input{
 }
 
 .correct-answer{
-    color: green;
+    color: white;
+    background-color: green;
     border: 2px solid green;
 }
