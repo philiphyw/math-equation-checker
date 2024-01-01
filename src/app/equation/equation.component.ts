@@ -28,7 +28,7 @@ export class EquationComponent {
     },
     [
       // no need to invoke the function, just provide a reference
-      EquationValidators.addition
+      EquationValidators.addition('answer','firstValue','secondValue'),
     ]
   );
 
