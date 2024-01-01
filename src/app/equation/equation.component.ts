@@ -1,13 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { EquationValidators } from '../equation-validators';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-equation',
   templateUrl: './equation.component.html',
   styleUrls: ['./equation.component.css'],
 })
-export class EquationComponent {
+export class EquationComponent implements OnInit, OnDestroy {
+  subscriptions = new Subscription();
+
   get firstValue() {
     return this.equathionForm.value.firstValue;
   }
@@ -28,13 +31,33 @@ export class EquationComponent {
     },
     [
       // no need to invoke the function, just provide a reference
-      EquationValidators.addition('answer','firstValue','secondValue'),
+      EquationValidators.addition('answer', 'firstValue', 'secondValue'),
     ]
   );
+
+  ngOnInit(): void {
+    this.subscriptions.add(
+      this.equathionForm.statusChanges.subscribe((value) => {
+        if (value.toLocaleLowerCase() === 'valid') {
+          setTimeout(() => {
+            this.equathionForm.controls.firstValue.setValue(
+              this.generateRandomNumber()
+            );
+            this.equathionForm.controls.secondValue.setValue(
+              this.generateRandomNumber()
+            );
+            this.equathionForm.controls.answer.setValue('');
+          },2000)
+        }
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
 
   private generateRandomNumber() {
     return Math.floor(Math.random() * 10);
   }
-
- 
 }

@@ -1,10 +1,12 @@
 <form [formGroup]="equathionForm">
     {{firstValue}} + {{secondValue}} = 
-    <input type="text" formControlName="answer"/>
+    <input type="text" formControlName="answer" [ngClass]="{'correct-answer':equathionForm.valid && equathionForm.controls.answer.dirty}"/>
 </form>
 
 
 <hr/>
+<div>Answer Control:{{equathionForm.controls.answer.dirty}}</div>
 <div>Form is valid:{{equathionForm.valid}}</div>
 <div>Form value:{{equathionForm.value | json}}</div>
 <div>Form errors:{{equathionForm.errors | json}}</div>
+<div>Form status changes:{{equathionForm.statusChanges | async }}</div>

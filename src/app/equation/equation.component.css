@@ -1,0 +1,9 @@
+
+input{
+    outline: none;
+}
+
+.correct-answer{
+    color: green;
+    border: 2px solid green;
+}
