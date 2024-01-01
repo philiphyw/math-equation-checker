@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
+import { EquationValidators } from '../equation-validators';
 
 @Component({
   selector: 'app-equation',
@@ -26,15 +27,8 @@ export class EquationComponent {
       answer: new FormControl(''),
     },
     [
-      (form: AbstractControl) => {
-        
-        const {  firstValue, secondValue, answer } = form.value;
-        if (form.pristine) return null;
-        if (firstValue + secondValue === Number.parseInt(answer)) {
-          return null;
-        }
-        return { addition: true };
-      },
+      // no need to invoke the function, just provide a reference
+      EquationValidators.addition
     ]
   );
 
