@@ -2,7 +2,7 @@
     {{firstValue}} + {{secondValue}} = 
     <input type="text" formControlName="answer" [ngClass]="{'correct-answer':equathionForm.valid && equathionForm.controls.answer.dirty}"/>
 </form>
-
+<div class="statistic">Average Time (in seconds) by each correct answer: {{averageSecondPerCorrectAnswer |  number:'1.1-3':'en'  }} </div>
 
 <hr/>
 <div>Answer Control:{{equathionForm.controls.answer.dirty}}</div>

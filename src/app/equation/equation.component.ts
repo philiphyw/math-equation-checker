@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { EquationValidators } from '../equation-validators';
-import { Subscription, delay } from 'rxjs';
+import { Subscription, delay, filter, map, scan, tap } from 'rxjs';
 
 @Component({
   selector: 'app-equation',
@@ -9,6 +9,9 @@ import { Subscription, delay } from 'rxjs';
   styleUrls: ['./equation.component.css'],
 })
 export class EquationComponent implements OnInit, OnDestroy {
+averageSecondPerCorrectAnswer=0.0;
+
+
   subscriptions = new Subscription();
 
   get firstValue() {
@@ -37,15 +40,27 @@ export class EquationComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subscriptions.add(
-      this.equathionForm.statusChanges.pipe(delay(500)).subscribe((value) => {
-        if (value.toLocaleLowerCase() === 'valid') {
+      this.equathionForm.statusChanges
+        .pipe(
+          delay(500),
+          filter((value) => value.toLowerCase() === 'valid'),
+          scan((accumulator)=>{
+            return {
+              correctAnswerCount: accumulator.correctAnswerCount+1,
+              startTime: accumulator.startTime
+            }
+          },{correctAnswerCount:0, startTime: new Date()})
+        )
+        .subscribe(({correctAnswerCount,startTime}) => {
+          const seconds = (new Date().getTime() - startTime.getTime())/1000;
+          this.averageSecondPerCorrectAnswer = seconds/correctAnswerCount;
+
           this.equathionForm.patchValue({
-            firstValue:  this.generateRandomNumber(),
-            secondValue:  this.generateRandomNumber(),
-            answer:''
-          })
-        }
-      })
+            firstValue: this.generateRandomNumber(),
+            secondValue: this.generateRandomNumber(),
+            answer: '',
+          });
+        })
     );
   }
 
